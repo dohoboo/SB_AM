@@ -23,6 +23,7 @@ public class UsrArticleController {
 		makeTestData();
 	}
 
+//서비스 메서드
 	private void makeTestData() {
 
 		for (int i = 1; i <= 10; i++) {
@@ -55,6 +56,21 @@ public class UsrArticleController {
 		return null;
 	}
 
+	private void modifyArticle(int id, String title, String body) {
+		Article article = getArticleById(id);
+
+		article.setTitle(title);
+		article.setBody(body);
+	}
+
+	private void deleteArticle(int id) {
+
+		Article article = getArticleById(id);
+
+		articles.remove(article);
+	}
+
+// 액션 메서드
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
 	public Article doAdd(String title, String body) {
@@ -73,7 +89,7 @@ public class UsrArticleController {
 		if (article == null) {
 			return id + "번 게시글은 존재하지 않습니다.";
 		}
-		articles.remove(article);
+		deleteArticle(id);
 		return id + "번 게시글이 삭제되었습니다.";
 	}
 
@@ -81,17 +97,13 @@ public class UsrArticleController {
 	@ResponseBody
 	public String doModify(int id, String title, String body) {
 
-		Article foundArticle = null;
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				foundArticle = article;
-				break;
-			}
-			if (foundArticle == null) {
-				return id + "번 게시글은 존재하지 않습니다.";
-			}
-			foundArticle = wirteAritcle(title, body);
+		Article article = getArticleById(id);
+
+		if (article == null) {
+			return id + "번 게시글은 존재하지 않습니다.";
 		}
+		modifyArticle(id, title, body);
+
 		return id + "번 게시글이 수정되었습니다.";
 	}
 
