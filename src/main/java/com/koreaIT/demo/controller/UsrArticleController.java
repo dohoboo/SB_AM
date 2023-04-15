@@ -25,29 +25,60 @@ public class UsrArticleController {
 	}
 
 	private void makeTestData() {
+		
 		for(int i = 1; i <= 10; i++) {
 			String title = "제목" + i;
 			String body = "내용" + i;
 			
-			Article article = new Article(i, title, body);
-			articles.add(article);
+			wirteAritcle(title, body);
 		}
 		
 	}
-
-	@RequestMapping("/usr/article/doAdd")
-	@ResponseBody
-	public Article doAdd(String title, String body) {
-
+	
+	private Article wirteAritcle(String title, String body) {
+		
 		int id = lastArticleId + 1;
 		lastArticleId = id;
 
 		Article article = new Article(id, title, body);
 
 		articles.add(article);
-
+		
 		return article;
 	}
+
+	@RequestMapping("/usr/article/doAdd")
+	@ResponseBody
+	public Article doAdd(String title, String body) {
+		
+		Article article = wirteAritcle(title, body);
+		
+		return article;
+	}
+	
+	@RequestMapping("/usr/article/doDelete")
+	@ResponseBody
+	public String doDelete(int id) {
+		
+		Article foundArticle = null;
+		
+		for(Article article : articles) {
+			if(article.getId() == id) {
+				foundArticle = article;
+				break;
+			}
+			
+			if(foundArticle == null) {
+				return id + "번 게시글은 존재하지 않습니다.";
+			}
+			
+			articles.remove(foundArticle);
+		}
+		
+		return id + "번 게시글이 삭제되었습니다.";
+	}
+	
+	
 
 	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
