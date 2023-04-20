@@ -10,6 +10,6 @@ public class UsrHomeController {
 	@RequestMapping("/usr/home/main")
 	@ResponseBody
 	public String showMain() {
-		return "안녕하세요";
+		return "안녕하세요123";
 	}
 }
